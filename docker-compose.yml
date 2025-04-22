@@ -8,6 +8,8 @@ services:
       - monitoring
     restart: always
 
+# Because you need something to watch over your services 24/7 and tell you when things go wrong.
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -21,6 +23,9 @@ services:
     networks:
       - monitoring
 
+# Receives alerts from Prometheus.
+# Decides what to do with them
+
   alertmanager:
     image: prom/alertmanager:latest
     container_name: alertmanager
@@ -32,6 +37,9 @@ services:
       - "9093:9093"
     networks:
       - monitoring
+
+# The webhook is the way Alertmanager sends that alert to a script or app (like a Python Flask server).
+# That script then runs an Ansible playbook to fix it.
 
   webhook:
     build: .
@@ -45,7 +53,7 @@ services:
       - "5000:5000"
     networks:
       - monitoring
-
+# It creates a private network for your containers to talk to each other.
 networks:
   monitoring:
     driver: bridge
