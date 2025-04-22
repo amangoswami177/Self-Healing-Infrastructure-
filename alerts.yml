@@ -9,3 +9,6 @@ groups:
         annotations:
           summary: "NGINX is down"
           description: "NGINX has been down for 30s"
+
+
+# creates alert when services/container is dowm
