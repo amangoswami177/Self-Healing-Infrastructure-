@@ -7,3 +7,5 @@
       service:
         name: nginx
         state: restarted
+
+# Ansible playbook to ensure that service should be restarted
