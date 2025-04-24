@@ -9,7 +9,7 @@ def receive_alert():
     print("Received alert:", data["alerts"][0]["annotations"]["summary"])
     
     # Trigger Ansible playbook
-    subprocess.run(["ansible-playbook", "nginx_restart.yml"])
+    subprocess.run(["ansible-playbook", "tindog_restart.yml"])
     
     return "OK", 200
 
