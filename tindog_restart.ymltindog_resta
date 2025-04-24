@@ -1,11 +1,12 @@
 ---
-- name: Restart NGINX service
+- name: Restart tindog service
   hosts: localhost
   become: true
   tasks:
-    - name: Ensure NGINX is running
+    - name: Ensure tindog is running
       service:
-        name: nginx
+        name: tindog
         state: restarted
+
 
 # Ansible playbook to ensure that service should be restarted
