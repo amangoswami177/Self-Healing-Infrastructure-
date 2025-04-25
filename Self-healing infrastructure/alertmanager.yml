@@ -1,0 +1,14 @@
+global:
+  resolve_timeout: 1m
+
+route:
+  receiver: "webhook"
+
+receivers:
+  - name: "webhook"
+    webhook_configs:
+      - url: "http://webhook:5000/"
+
+
+
+# after creating alert...alert manager send a webhook, and alert the team

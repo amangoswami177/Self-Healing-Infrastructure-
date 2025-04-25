@@ -1,0 +1,56 @@
+services: 
+  tindog:
+    image: ramgoswami3/tindog-site:latest
+    container_name: tindog
+    ports:
+      - "8080:80"
+    networks:
+      - monitoring
+    restart: always
+# Because you need something to watch over your services 24/7 and tell you when things go wrong.
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alerts.yml:/etc/prometheus/alerts.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+    depends_on:
+      - tindog
+# Receives alerts from Prometheus.
+# Decides what to do with them
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/config.yml
+    command:
+      - "--config.file=/etc/alertmanager/config.yml"
+    ports:
+      - "9093:9093"
+    networks:
+      - monitoring
+# The webhook is the way Alertmanager sends that alert to a script or app (like a Python Flask server).
+# That script then runs an Ansible playbook to fix it.
+  
+  webhook:
+    build: .
+    container_name: webhook
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /app
+    command: ["python", "webhook_receiver.py"]
+    ports:
+      - "5000:5000"
+    networks:
+      - monitoring
+# It creates a private network for your containers to talk to each other.
+networks:   
+  monitoring:
+    driver: bridge

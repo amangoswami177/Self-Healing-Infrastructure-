@@ -1,0 +1,29 @@
+global:
+  scrape_interval: 15s
+# Prometheus works by pulling data from services that expose metrics (like NGINX or a node exporter).
+
+# Each time it pulls, it stores those metrics with a timestamp.
+
+# This is called a "scrape".
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]
+
+# It tells Prometheus:
+
+# "When an alert is triggered, send it to Alertmanager running at alertmanager:9093."
+
+
+rule_files:
+  - "alerts.yml"
+
+# This tells Prometheus to load and use the alerting rules from the file alerts.yml
+
+scrape_configs:
+  - job_name: "tindog"
+    static_configs:
+      - targets: ["tindog:80"]
+
+# This defines the targets Prometheus should scrape (check for metrics).
