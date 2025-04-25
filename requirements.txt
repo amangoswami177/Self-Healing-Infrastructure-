@@ -1,5 +1,0 @@
-flask
-
-
-
-#  A shopping list of Python packages your app needs.
