@@ -1,8 +1,0 @@
-- name: Restart tindog container
-  hosts: localhost
-  connection: local
-  tasks:
-    - name: Restart tindog container
-      shell: docker start tindog || docker restart tindog
-
-# To restart the container
